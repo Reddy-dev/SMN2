@@ -1,0 +1,28 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.2",
+	"FriendlyName": "Advanced Movement Prediction Plugin",
+	"Description": "Multiplayer Movement Prediction such as Movement Modes, Values, and even Launch character available to you in Blueprints. This can be used for a wide variety of things to Sprinting, Wall-Running, and more! This plugin is 100% free and will be forever!",
+	"Category": "Code Plugins",
+	"CreatedBy": "Reddy",
+	"CreatedByURL": "",
+	"DocsURL": "https://docs.google.com/document/d/1FZhUMvapVWpn9tU-742Ud9Ne2zmc9-8kE_YqnBXFO7k/edit?usp=sharing",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/e6ca5cef76c44adb89d94138c236638c",
+	"SupportURL": "",
+	"EngineVersion": "4.26.0",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "MultiplayerMovementPlugin",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
+		}
+	]
+}
