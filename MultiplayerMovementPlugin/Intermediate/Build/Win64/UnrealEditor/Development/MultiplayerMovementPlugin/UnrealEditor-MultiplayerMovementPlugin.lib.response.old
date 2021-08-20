@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MultiplayerMovementPlugin.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"F:\ProjectElementalEngine\Engine\Intermediate\Build\Win64\UnrealEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"C:\Users\ewn11\Documents\Unreal Projects\SMN2\Plugins\Smooth-Networked-Movement-Plugin\MultiplayerMovementPlugin\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerMovementPlugin\MultiplayerMovementPlugin.cpp.obj"
+"F:\ProjectElementalEngine\Engine\Intermediate\Build\Win64\UnrealEditor\Development\Default.rc2.res"
+/OUT:"C:\Users\ewn11\Documents\Unreal Projects\SMN2\Plugins\Smooth-Networked-Movement-Plugin\MultiplayerMovementPlugin\Intermediate\Build\Win64\UnrealEditor\Development\MultiplayerMovementPlugin\UnrealEditor-MultiplayerMovementPlugin.lib"

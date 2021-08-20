@@ -1,0 +1,14 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\source\\multiplayermovementplugin\\private\\multiplayermovementplugin.cpp",
+        "ProvidedModule": "",
+        "PCH": "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\development\\multiplayermovementplugin\\definitions.multiplayermovementplugin.h",
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\source\\multiplayermovementplugin\\public\\multiplayermovementplugin.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

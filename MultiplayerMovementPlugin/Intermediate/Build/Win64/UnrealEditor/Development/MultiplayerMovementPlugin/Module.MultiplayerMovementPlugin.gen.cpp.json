@@ -1,0 +1,39 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\development\\multiplayermovementplugin\\module.multiplayermovementplugin.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\development\\multiplayermovementplugin\\definitions.multiplayermovementplugin.h",
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayermovementplugin\\multiplayermovementplugin.init.gen.cpp",
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayermovementplugin\\smn2charactermovementcomponent.gen.cpp",
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\source\\multiplayermovementplugin\\public\\smn2charactermovementcomponent.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementcomponent.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\rootmotionsource.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\ai\\navigation\\navigationavoidancetypes.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\navigationavoidancetypes.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\public\\ai\\rvoavoidanceinterface.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\rvoavoidanceinterface.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\pawnmovementcomponent.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\navmovementcomponent.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\ai\\navigation\\pathfollowingagentinterface.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\pathfollowingagentinterface.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\movementcomponent.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\movementcomponent.generated.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\navmovementcomponent.generated.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\pawnmovementcomponent.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\charactermovementreplication.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\classes\\interfaces\\networkpredictioninterface.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\networkpredictioninterface.generated.h",
+            "f:\\projectelementalengine\\engine\\source\\runtime\\engine\\public\\charactermovementcomponentasync.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\charactermovementcomponentasync.generated.h",
+            "f:\\projectelementalengine\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\charactermovementcomponent.generated.h",
+            "c:\\users\\ewn11\\documents\\unreal projects\\smn2\\plugins\\smooth-networked-movement-plugin\\multiplayermovementplugin\\intermediate\\build\\win64\\unrealeditor\\inc\\multiplayermovementplugin\\smn2charactermovementcomponent.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
