@@ -125,8 +125,7 @@ float UMyCharacterMovementComponent::GetMaxSpeed() const
             //Called When Falling 
             case MOVE_Falling:
                 {
-                    
-                    return 600.f; 
+                    return MaxGroundSpeed; 
                 }
 
         case MOVE_Swimming:
