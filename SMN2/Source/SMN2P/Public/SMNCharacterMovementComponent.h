@@ -16,7 +16,7 @@ struct TSMN_PredictedProperty
 
 	bool operator ==(const TSMN_PredictedProperty& Other) const
 	{
-		return PropertyName == Other.PropertyName && Value == Other.Value && DefaultValue == Other.DefaultValue;
+		return PropertyName == Other.PropertyName && DefaultValue == Other.DefaultValue;
 	}
 };
 
@@ -33,6 +33,14 @@ public:
 	TArray<TSMN_PredictedProperty<int32>> MoveData_PredictedProperties_Int32;
 	TArray<TSMN_PredictedProperty<float>> MoveData_PredictedProperties_Float;
 	TArray<TSMN_PredictedProperty<double>> MoveData_PredictedProperties_Double;
+	TArray<TSMN_PredictedProperty<FVector>> MoveData_PredictedProperties_Vector;
+	TArray<TSMN_PredictedProperty<FVector2D>> MoveData_PredictedProperties_Vector2D;
+	TArray<TSMN_PredictedProperty<FVector4>> MoveData_PredictedProperties_Vector4;
+	TArray<TSMN_PredictedProperty<FQuat>> MoveData_PredictedProperties_Quat;
+	TArray<TSMN_PredictedProperty<FRotator>> MoveData_PredictedProperties_Rotator;
+	TArray<TSMN_PredictedProperty<uint8>> MoveData_PredictedProperties_Byte;
+	TArray<TSMN_PredictedProperty<FGameplayTag>> MoveData_PredictedProperties_GameplayTag;
+	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> MoveData_PredictedProperties_GameplayTagContainer;
 };
 
 class FSMN_CharacterNetworkMoveDataContainer : public FCharacterNetworkMoveDataContainer
@@ -59,6 +67,14 @@ public:
 	TArray<TSMN_PredictedProperty<int32>> SavedPredictedProperties_Int32;
 	TArray<TSMN_PredictedProperty<float>> SavedPredictedProperties_Float;
 	TArray<TSMN_PredictedProperty<double>> SavedPredictedProperties_Double;
+	TArray<TSMN_PredictedProperty<FVector>> SavedPredictedProperties_Vector;
+	TArray<TSMN_PredictedProperty<FVector2D>> SavedPredictedProperties_Vector2D;
+	TArray<TSMN_PredictedProperty<FVector4>> SavedPredictedProperties_Vector4;
+	TArray<TSMN_PredictedProperty<FQuat>> SavedPredictedProperties_Quat;
+	TArray<TSMN_PredictedProperty<FRotator>> SavedPredictedProperties_Rotator;
+	TArray<TSMN_PredictedProperty<uint8>> SavedPredictedProperties_Byte;
+	TArray<TSMN_PredictedProperty<FGameplayTag>> SavedPredictedProperties_GameplayTag;
+	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> SavedPredictedProperties_GameplayTagContainer;
 };
 
 class FSMN_NetworkPredictionData_Client : public FNetworkPredictionData_Client_Character
@@ -112,9 +128,6 @@ public:
 	void AddPredictedProperty_Quat(FName PropertyName, FQuat DefaultValue);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Transform(FName PropertyName, FTransform DefaultValue);
-
-	UFUNCTION(BlueprintCallable, Category = "SMN2")
 	void AddPredictedProperty_Byte(FName PropertyName, uint8 DefaultValue);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
@@ -122,6 +135,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
 	void AddPredictedProperty_GameplayTagContainer(FName PropertyName, FGameplayTagContainer DefaultValue);
+
+	UFUNCTION(BlueprintCallable, Category = "SMN2")
+	void AddPredictedProperty_Rotator(FName PropertyName, FRotator DefaultValue);
 
 	TArray<TSMN_PredictedProperty<bool>> PredictedProperties_Bool;
 	TArray<TSMN_PredictedProperty<int32>> PredictedProperties_Int32;
@@ -131,7 +147,7 @@ public:
 	TArray<TSMN_PredictedProperty<FVector2D>> PredictedProperties_Vector2D;
 	TArray<TSMN_PredictedProperty<FVector4>> PredictedProperties_Vector4;
 	TArray<TSMN_PredictedProperty<FQuat>> PredictedProperties_Quat;
-	TArray<TSMN_PredictedProperty<FTransform>> PredictedProperties_Transform;
+	TArray<TSMN_PredictedProperty<FRotator>> PredictedProperties_Rotator;
 	TArray<TSMN_PredictedProperty<uint8>> PredictedProperties_Byte;
 	TArray<TSMN_PredictedProperty<FGameplayTag>> PredictedProperties_GameplayTag;
 	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> PredictedProperties_GameplayTagContainer;
@@ -139,95 +155,99 @@ public:
 
 	// Implementable Events
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "OnMovementUpdated"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "Construction"))
+	void K2_Construction();
+	virtual void PostInitProperties() override;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "OnMovementUpdated"))
 	void K2_OnMovementUpdated(float DeltaTime, const FVector OldLocation, const FVector OldVelocity);
 	virtual void OnMovementUpdated(float DeltaSeconds, const FVector& OldLocation, const FVector& OldVelocity) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "OnMovementModeChanged"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "OnMovementModeChanged"))
 	void K2_OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode);
 	virtual void OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "GetMaxSpeed"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "GetMaxSpeed"))
 	float K2_GetMaxSpeed() const;
 	virtual float GetMaxSpeed() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "GetMaxAcceleration"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "GetMaxAcceleration"))
 	float K2_GetMaxAcceleration() const;
 	virtual float GetMaxAcceleration() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "GetMaxBrakingDeceleration"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "GetMaxBrakingDeceleration"))
 	float K2_GetMaxBrakingDeceleration() const;
 	virtual float GetMaxBrakingDeceleration() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "GetGravityZ"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "GetGravityZ"))
 	float K2_GetGravityZ() const;
 	virtual float GetGravityZ() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "GetMaxJumpHeight"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "GetMaxJumpHeight"))
 	float K2_GetMaxJumpHeight() const;
 	virtual float GetMaxJumpHeight() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "ShouldCorrectRotation"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "ShouldCorrectRotation"))
 	bool K2_ShouldCorrectRotation() const;
 	virtual bool ShouldCorrectRotation() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "ShouldCatchAir"))
-	bool K2_ShouldCatchAir(const FFindFloorResult OldFloor, const FFindFloorResult NewFloor) const;
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "ShouldCatchAir"))
+	bool K2_ShouldCatchAir(const FFindFloorResult OldFloor, const FFindFloorResult NewFloor);
 	virtual bool ShouldCatchAir(const FFindFloorResult& OldFloor, const FFindFloorResult& NewFloor) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "CanAttemptJump"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "CanAttemptJump"))
 	bool K2_CanAttemptJump() const;
 	virtual bool CanAttemptJump() const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "StartFalling"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "StartFalling"))
 	void K2_StartFalling(int32 Iterations, float remainingTime, float timeTick, const FVector Delta, const FVector subLoc);
 	virtual void StartFalling(int32 Iterations, float remainingTime, float timeTick, const FVector& Delta, const FVector& subLoc) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "HandleWalkingOffLedge"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "HandleWalkingOffLedge"))
 	void K2_HandleWalkingOffLedge(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta);
 	virtual void HandleWalkingOffLedge(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PhysWalking"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PhysWalking"))
 	void K2_PhysWalking(float deltaTime, int32 Iterations);
 	virtual void PhysWalking(float deltaTime, int32 Iterations) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PhysFalling"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PhysFalling"))
 	void K2_PhysFalling(float deltaTime, int32 Iterations);
 	virtual void PhysFalling(float deltaTime, int32 Iterations) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PhysSwimming"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PhysSwimming"))
 	void K2_PhysSwimming(float deltaTime, int32 Iterations);
 	virtual void PhysSwimming(float deltaTime, int32 Iterations) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PhysFlying"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PhysFlying"))
 	void K2_PhysFlying(float deltaTime, int32 Iterations);
 	virtual void PhysFlying(float deltaTime, int32 Iterations) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PhysCustom"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PhysCustom"))
 	void K2_PhysCustom(float deltaTime, int32 Iterations);
 	virtual void PhysCustom(float deltaTime, int32 Iterations) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "SlideAlongSurface"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "SlideAlongSurface"))
 	float K2_SlideAlongSurface(const FVector& Delta, float Time, const FVector& Normal, FHitResult& Hit, bool bHandleImpact);
 	virtual float SlideAlongSurface(const FVector& Delta, float Time, const FVector& Normal, FHitResult& Hit, bool bHandleImpact) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "TwoWallAdjust"))
-	void K2_TwoWallAdjust(FVector& Delta, const FHitResult& Hit, const FVector& OldHitNormal) const;
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "TwoWallAdjust"))
+	void K2_TwoWallAdjust(FVector& Delta, const FHitResult Hit, const FVector OldHitNormal) const;
 	virtual void TwoWallAdjust(FVector& Delta, const FHitResult& Hit, const FVector& OldHitNormal) const override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "AdjustFloorHeight"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "AdjustFloorHeight"))
 	void K2_AdjustFloorHeight();
 	virtual void AdjustFloorHeight() override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "CalcVelocity"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "CalcVelocity"))
 	void K2_CalcVelocity(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration);
 	virtual void CalcVelocity(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "PerformMovement"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "PerformMovement"))
 	void K2_PerformMovement(float deltaTime);
 	virtual void PerformMovement(float deltaTime) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "SMN2", meta = (DisplayName = "SimulateMovement"))
+	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "SimulateMovement"))
 	void K2_SimulateMovement(float deltaTime);
 	virtual void SimulateMovement(float deltaTime) override;
 	

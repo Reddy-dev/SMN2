@@ -14,10 +14,20 @@ void FSMN_NetworkMoveData::ClientFillNetworkMoveData(const FSavedMove_Character&
 	MoveData_PredictedProperties_Int32 = SMN_ClientMove.SavedPredictedProperties_Int32;
 	MoveData_PredictedProperties_Float = SMN_ClientMove.SavedPredictedProperties_Float;
 	MoveData_PredictedProperties_Double = SMN_ClientMove.SavedPredictedProperties_Double;
+	MoveData_PredictedProperties_Vector = SMN_ClientMove.SavedPredictedProperties_Vector;
+	MoveData_PredictedProperties_Vector2D = SMN_ClientMove.SavedPredictedProperties_Vector2D;
+	MoveData_PredictedProperties_Vector4 = SMN_ClientMove.SavedPredictedProperties_Vector4;
+	MoveData_PredictedProperties_Quat = SMN_ClientMove.SavedPredictedProperties_Quat;
+	MoveData_PredictedProperties_Rotator = SMN_ClientMove.SavedPredictedProperties_Rotator;
+	MoveData_PredictedProperties_Byte = SMN_ClientMove.SavedPredictedProperties_Byte;
+	MoveData_PredictedProperties_GameplayTag = SMN_ClientMove.SavedPredictedProperties_GameplayTag;
+	MoveData_PredictedProperties_GameplayTagContainer = SMN_ClientMove.SavedPredictedProperties_GameplayTagContainer;
 }
 
 bool FSMN_NetworkMoveData::Serialize(UCharacterMovementComponent& CharacterMovement, FArchive& Ar, UPackageMap* PackageMap, ENetworkMoveType MoveType)
 {
+	bool bOut;
+	
 	for (TSMN_PredictedProperty<bool>& Property : MoveData_PredictedProperties_Bool)
 	{
 		SerializeOptionalValue<bool>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
@@ -36,6 +46,46 @@ bool FSMN_NetworkMoveData::Serialize(UCharacterMovementComponent& CharacterMovem
 	for (TSMN_PredictedProperty<double>& Property : MoveData_PredictedProperties_Double)
 	{
 		SerializeOptionalValue<double>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FVector>& Property : MoveData_PredictedProperties_Vector)
+	{
+		SerializeOptionalValue<FVector>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FVector2D>& Property : MoveData_PredictedProperties_Vector2D)
+	{
+		SerializeOptionalValue<FVector2D>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FVector4>& Property : MoveData_PredictedProperties_Vector4)
+	{
+		SerializeOptionalValue<FVector4>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FQuat>& Property : MoveData_PredictedProperties_Quat)
+	{
+		SerializeOptionalValue<FQuat>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FRotator>& Property : MoveData_PredictedProperties_Rotator)
+	{
+		SerializeOptionalValue<FRotator>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<uint8>& Property : MoveData_PredictedProperties_Byte)
+	{
+		SerializeOptionalValue<uint8>(Ar.IsSaving(), Ar, Property.Value, Property.DefaultValue);
+	}
+
+	for (TSMN_PredictedProperty<FGameplayTag>& Property : MoveData_PredictedProperties_GameplayTag)
+	{
+		Property.Value.NetSerialize(Ar, PackageMap, bOut);
+	}
+
+	for (TSMN_PredictedProperty<FGameplayTagContainer>& Property : MoveData_PredictedProperties_GameplayTagContainer)
+	{
+		Property.Value.NetSerialize(Ar, PackageMap, bOut);
 	}
 	
 	return !Ar.IsError();
@@ -71,6 +121,46 @@ void FSMN_SavedMove::Clear()
 	{
 		DoubleProperty.Value = 0.0;
 	}
+
+	for (TSMN_PredictedProperty<FVector>& VectorProperty : SavedPredictedProperties_Vector)
+	{
+		VectorProperty.Value = FVector::ZeroVector;
+	}
+
+	for (TSMN_PredictedProperty<FVector2D>& Vector2DProperty : SavedPredictedProperties_Vector2D)
+	{
+		Vector2DProperty.Value = FVector2D::ZeroVector;
+	}
+
+	for (TSMN_PredictedProperty<FVector4>& Vector4Property : SavedPredictedProperties_Vector4)
+	{
+		Vector4Property.Value = FVector4::Zero();
+	}
+
+	for (TSMN_PredictedProperty<FQuat>& QuatProperty : SavedPredictedProperties_Quat)
+	{
+		QuatProperty.Value = FQuat::Identity;
+	}
+
+	for (TSMN_PredictedProperty<FRotator>& RotatorProperty : SavedPredictedProperties_Rotator)
+	{
+		RotatorProperty.Value = FRotator::ZeroRotator;
+	}
+
+	for (TSMN_PredictedProperty<uint8>& ByteProperty : SavedPredictedProperties_Byte)
+	{
+		ByteProperty.Value = 0;
+	}
+
+	for (TSMN_PredictedProperty<FGameplayTag>& GameplayTagProperty : SavedPredictedProperties_GameplayTag)
+	{
+		GameplayTagProperty.Value = FGameplayTag::EmptyTag;
+	}
+
+	for (TSMN_PredictedProperty<FGameplayTagContainer>& GameplayTagContainerProperty : SavedPredictedProperties_GameplayTagContainer)
+	{
+		GameplayTagContainerProperty.Value = FGameplayTagContainer::EmptyContainer;
+	}
 }
 
 bool FSMN_SavedMove::CanCombineWith(const FSavedMovePtr& NewMove, ACharacter* Character, float MaxDelta) const
@@ -93,6 +183,46 @@ bool FSMN_SavedMove::CanCombineWith(const FSavedMovePtr& NewMove, ACharacter* Ch
 	}
 
 	if (SavedPredictedProperties_Double != NewSMNMove->SavedPredictedProperties_Double)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Vector != NewSMNMove->SavedPredictedProperties_Vector)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Vector2D != NewSMNMove->SavedPredictedProperties_Vector2D)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Vector4 != NewSMNMove->SavedPredictedProperties_Vector4)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Quat != NewSMNMove->SavedPredictedProperties_Quat)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Rotator != NewSMNMove->SavedPredictedProperties_Rotator)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_Byte != NewSMNMove->SavedPredictedProperties_Byte)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_GameplayTag != NewSMNMove->SavedPredictedProperties_GameplayTag)
+	{
+		return false;
+	}
+
+	if (SavedPredictedProperties_GameplayTagContainer != NewSMNMove->SavedPredictedProperties_GameplayTagContainer)
 	{
 		return false;
 	}
@@ -146,6 +276,72 @@ void FSMN_SavedMove::SetMoveFor(ACharacter* Character, float InDeltaTime, FVecto
 				DoubleProperty.Value = Value;
 			}
 		}
+
+		for (TSMN_PredictedProperty<FVector>& VectorProperty : SMNCharacterMovement->PredictedProperties_Vector)
+		{
+			if (const FStructProperty* VectorPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(VectorProperty.PropertyName)))
+			{;
+				VectorProperty.Value = *VectorPropertyPtr->ContainerPtrToValuePtr<FVector>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector2D>& Vector2DProperty : SMNCharacterMovement->PredictedProperties_Vector2D)
+		{
+			if (const FStructProperty* Vector2DPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(Vector2DProperty.PropertyName)))
+			{
+				Vector2DProperty.Value = *Vector2DPropertyPtr->ContainerPtrToValuePtr<FVector2D>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector4>& Vector4Property : SMNCharacterMovement->PredictedProperties_Vector4)
+		{
+			if (const FStructProperty* Vector4PropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(Vector4Property.PropertyName)))
+			{
+				Vector4Property.Value = *Vector4PropertyPtr->ContainerPtrToValuePtr<FVector4>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FQuat>& QuatProperty : SMNCharacterMovement->PredictedProperties_Quat)
+		{
+			if (const FStructProperty* QuatPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(QuatProperty.PropertyName)))
+			{
+				QuatProperty.Value = *QuatPropertyPtr->ContainerPtrToValuePtr<FQuat>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FRotator>& RotatorProperty : SMNCharacterMovement->PredictedProperties_Rotator)
+		{
+			if (const FStructProperty* RotatorPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(RotatorProperty.PropertyName)))
+			{
+				RotatorProperty.Value = *RotatorPropertyPtr->ContainerPtrToValuePtr<FRotator>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<uint8>& ByteProperty : SMNCharacterMovement->PredictedProperties_Byte)
+		{
+			if (const FByteProperty* BytePropertyPtr = Cast<FByteProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(ByteProperty.PropertyName)))
+			{
+				const void* ValuePtr = BytePropertyPtr->ContainerPtrToValuePtr<void>(SMNCharacterMovement);
+				const uint8 Value = BytePropertyPtr->GetPropertyValue(ValuePtr);
+				ByteProperty.Value = Value;
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTag>& GameplayTagProperty : SMNCharacterMovement->PredictedProperties_GameplayTag)
+		{
+			if (const FStructProperty* GameplayTagPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(GameplayTagProperty.PropertyName)))
+			{
+				GameplayTagProperty.Value = *GameplayTagPropertyPtr->ContainerPtrToValuePtr<FGameplayTag>(SMNCharacterMovement);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTagContainer>& GameplayTagContainerProperty : SMNCharacterMovement->PredictedProperties_GameplayTagContainer)
+		{
+			if (const FStructProperty* GameplayTagContainerPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(GameplayTagContainerProperty.PropertyName)))
+			{
+				GameplayTagContainerProperty.Value = *GameplayTagContainerPropertyPtr->ContainerPtrToValuePtr<FGameplayTagContainer>(SMNCharacterMovement);
+			}
+		}
 	}
 }
 
@@ -189,6 +385,71 @@ void FSMN_SavedMove::PrepMoveFor(ACharacter* Character)
 			{
 				void* ValuePtr = DoublePropertyPtr->ContainerPtrToValuePtr<void>(SMNCharacterMovement);
 				DoublePropertyPtr->SetPropertyValue(ValuePtr, DoubleProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector>& VectorProperty : SavedPredictedProperties_Vector)
+		{
+			if (const FStructProperty* VectorPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(VectorProperty.PropertyName)))
+			{
+				VectorPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &VectorProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector2D>& Vector2DProperty : SavedPredictedProperties_Vector2D)
+		{
+			if (const FStructProperty* Vector2DPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(Vector2DProperty.PropertyName)))
+			{
+				Vector2DPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &Vector2DProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector4>& Vector4Property : SavedPredictedProperties_Vector4)
+		{
+			if (const FStructProperty* Vector4PropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(Vector4Property.PropertyName)))
+			{
+				Vector4PropertyPtr->SetValue_InContainer(SMNCharacterMovement, &Vector4Property.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FQuat>& QuatProperty : SavedPredictedProperties_Quat)
+		{
+			if (const FStructProperty* QuatPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(QuatProperty.PropertyName)))
+			{
+				QuatPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &QuatProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FRotator>& RotatorProperty : SavedPredictedProperties_Rotator)
+		{
+			if (const FStructProperty* RotatorPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(RotatorProperty.PropertyName)))
+			{
+				RotatorPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &RotatorProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<uint8>& ByteProperty : SavedPredictedProperties_Byte)
+		{
+			if (const FByteProperty* BytePropertyPtr = Cast<FByteProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(ByteProperty.PropertyName)))
+			{
+				void* ValuePtr = BytePropertyPtr->ContainerPtrToValuePtr<void>(SMNCharacterMovement);
+				BytePropertyPtr->SetPropertyValue(ValuePtr, ByteProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTag>& GameplayTagProperty : SavedPredictedProperties_GameplayTag)
+		{
+			if (const FStructProperty* GameplayTagPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(GameplayTagProperty.PropertyName)))
+			{
+				GameplayTagPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &GameplayTagProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTagContainer>& GameplayTagContainerProperty : SavedPredictedProperties_GameplayTagContainer)
+		{
+			if (const FStructProperty* GameplayTagContainerPropertyPtr = CastField<FStructProperty>(SMNCharacterMovement->GetClass()->FindPropertyByName(GameplayTagContainerProperty.PropertyName)))
+			{
+				GameplayTagContainerPropertyPtr->SetValue_InContainer(SMNCharacterMovement, &GameplayTagContainerProperty.Value);
 			}
 		}
 	}
@@ -264,8 +525,80 @@ void USMNCharacterMovementComponent::MoveAutonomous(float ClientTimeStamp, float
 				DoublePropertyPtr->SetPropertyValue(ValuePtr, DoubleProperty.Value);
 			}
 		}
-	}
 
+		for (TSMN_PredictedProperty<FVector>& VectorProperty : PredictedProperties_Vector)
+		{
+			if (const FStructProperty* VectorPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(VectorProperty.PropertyName)))
+			{
+				VectorPropertyPtr->SetValue_InContainer(this, &VectorProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector2D>& Vector2DProperty : PredictedProperties_Vector2D)
+		{
+			if (const FStructProperty* Vector2DPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(Vector2DProperty.PropertyName)))
+			{
+				Vector2DPropertyPtr->SetValue_InContainer(this, &Vector2DProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FVector4>& Vector4Property : PredictedProperties_Vector4)
+		{
+			if (const FStructProperty* Vector4PropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(Vector4Property.PropertyName)))
+			{
+				Vector4PropertyPtr->SetValue_InContainer(this, &Vector4Property.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FRotator>& RotatorProperty : PredictedProperties_Rotator)
+		{
+			if (const FStructProperty* RotatorPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(RotatorProperty.PropertyName)))
+			{
+				RotatorPropertyPtr->SetValue_InContainer(this, &RotatorProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FQuat>& QuatProperty : PredictedProperties_Quat)
+		{
+			if (const FStructProperty* QuatPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(QuatProperty.PropertyName)))
+			{
+				QuatPropertyPtr->SetValue_InContainer(this, &QuatProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<uint8>& ByteProperty : PredictedProperties_Byte)
+		{
+			if (const FByteProperty* BytePropertyPtr = Cast<FByteProperty>(
+				GetClass()->FindPropertyByName(ByteProperty.PropertyName)))
+			{
+				void* ValuePtr = BytePropertyPtr->ContainerPtrToValuePtr<void>(this);
+				BytePropertyPtr->SetPropertyValue(ValuePtr, ByteProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTag>& GameplayTagProperty : PredictedProperties_GameplayTag)
+		{
+			if (const FStructProperty* GameplayTagPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(GameplayTagProperty.PropertyName)))
+			{
+				GameplayTagPropertyPtr->SetValue_InContainer(this, &GameplayTagProperty.Value);
+			}
+		}
+
+		for (TSMN_PredictedProperty<FGameplayTagContainer>& GameplayTagContainerProperty : PredictedProperties_GameplayTagContainer)
+		{
+			if (const FStructProperty* GameplayTagContainerPropertyPtr = CastField<FStructProperty>(
+				GetClass()->FindPropertyByName(GameplayTagContainerProperty.PropertyName)))
+			{
+				GameplayTagContainerPropertyPtr->SetValue_InContainer(this, &GameplayTagContainerProperty.Value);
+			}
+		}
+	}
 
 	Super::MoveAutonomous(ClientTimeStamp, DeltaTime, CompressedFlags, NewAccel);
 }
@@ -334,12 +667,12 @@ void USMNCharacterMovementComponent::AddPredictedProperty_Quat(FName PropertyNam
 	PredictedProperties_Quat.Add(NewProperty);
 }
 
-void USMNCharacterMovementComponent::AddPredictedProperty_Transform(FName PropertyName, FTransform DefaultValue)
+void USMNCharacterMovementComponent::AddPredictedProperty_Rotator(FName PropertyName, FRotator DefaultValue)
 {
-	TSMN_PredictedProperty<FTransform> NewProperty;
+	TSMN_PredictedProperty<FRotator> NewProperty;
 	NewProperty.PropertyName = PropertyName;
 	NewProperty.DefaultValue = DefaultValue;
-	PredictedProperties_Transform.Add(NewProperty);
+	PredictedProperties_Rotator.Add(NewProperty);
 }
 
 void USMNCharacterMovementComponent::AddPredictedProperty_Byte(FName PropertyName, uint8 DefaultValue)
@@ -366,228 +699,250 @@ void USMNCharacterMovementComponent::AddPredictedProperty_GameplayTagContainer(F
 	PredictedProperties_GameplayTagContainer.Add(NewProperty);
 }
 
+void USMNCharacterMovementComponent::K2_Construction_Implementation()
+{
+	
+}
+
+void USMNCharacterMovementComponent::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	K2_Construction(); 
+}
+
+void USMNCharacterMovementComponent::K2_OnMovementUpdated_Implementation(float DeltaTime, const FVector OldLocation,
+	const FVector OldVelocity)
+{
+	Super::OnMovementUpdated(DeltaTime, OldLocation, OldVelocity);
+}
+
 void USMNCharacterMovementComponent::OnMovementUpdated(float DeltaSeconds, const FVector& OldLocation, const FVector& OldVelocity)
 {
-	Super::OnMovementUpdated(DeltaSeconds, OldLocation, OldVelocity);
-
 	K2_OnMovementUpdated(DeltaSeconds, OldLocation, OldVelocity);
+}
+
+void USMNCharacterMovementComponent::K2_OnMovementModeChanged_Implementation(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	
 }
 
 void USMNCharacterMovementComponent::OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PreviousMovementMode, PreviousCustomMode);
-
+	
 	K2_OnMovementModeChanged(PreviousMovementMode, PreviousCustomMode);
+}
+
+float USMNCharacterMovementComponent::K2_GetMaxSpeed_Implementation() const
+{
+	return Super::GetMaxSpeed();
 }
 
 float USMNCharacterMovementComponent::GetMaxSpeed() const
 {
-	if (const UFunction* MaxSpeedFunction = GetClass()->FindFunctionByName("K2_GetMaxSpeed"); MaxSpeedFunction->IsInBlueprint())
-	{
-		return K2_GetMaxSpeed(); 
-	}
-	
-	return Super::GetMaxSpeed();
+	return K2_GetMaxSpeed();
+}
+
+float USMNCharacterMovementComponent::K2_GetMaxAcceleration_Implementation() const
+{
+	return Super::GetMaxAcceleration();
 }
 
 float USMNCharacterMovementComponent::GetMaxAcceleration() const
 {
-	if (const UFunction* MaxAccelerationFunction = GetClass()->FindFunctionByName("K2_GetMaxAcceleration"); MaxAccelerationFunction->IsInBlueprint())
-	{
-		return K2_GetMaxAcceleration();
-	}
+	return K2_GetMaxAcceleration();
+}
 
-	return Super::GetMaxAcceleration();
+float USMNCharacterMovementComponent::K2_GetMaxBrakingDeceleration_Implementation() const
+{
+	return Super::GetMaxBrakingDeceleration();
 }
 
 float USMNCharacterMovementComponent::GetMaxBrakingDeceleration() const
 {
-	if (const UFunction* MaxBrakingDecelerationFunction = GetClass()->FindFunctionByName("K2_GetMaxBrakingDeceleration"); MaxBrakingDecelerationFunction->IsInBlueprint())
-	{
-		return K2_GetMaxBrakingDeceleration();
-	}
+	return K2_GetMaxBrakingDeceleration();
+}
 
-	return Super::GetMaxBrakingDeceleration();
+float USMNCharacterMovementComponent::K2_GetGravityZ_Implementation() const
+{
+	return Super::GetGravityZ();
 }
 
 float USMNCharacterMovementComponent::GetGravityZ() const
 {
-	if (const UFunction* GravityZFunction = GetClass()->FindFunctionByName("K2_GetGravityZ"); GravityZFunction->IsInBlueprint())
-	{
-		return K2_GetGravityZ();
-	}
+	return K2_GetGravityZ();
+}
 
-	return Super::GetGravityZ();
+float USMNCharacterMovementComponent::K2_GetMaxJumpHeight_Implementation() const
+{
+	return Super::GetMaxJumpHeight();
 }
 
 float USMNCharacterMovementComponent::GetMaxJumpHeight() const
 {
-	if (const UFunction* MaxJumpHeightFunction = GetClass()->FindFunctionByName("K2_GetMaxJumpHeight"); MaxJumpHeightFunction->IsInBlueprint())
-	{
-		return K2_GetMaxJumpHeight();
-	}
+	return K2_GetMaxJumpHeight();
+}
 
-	return Super::GetMaxJumpHeight();
+bool USMNCharacterMovementComponent::K2_ShouldCorrectRotation_Implementation() const
+{
+	return Super::ShouldCorrectRotation();
 }
 
 bool USMNCharacterMovementComponent::ShouldCorrectRotation() const
 {
-	if (const UFunction* ShouldCorrectRotationFunction = GetClass()->FindFunctionByName("K2_ShouldCorrectRotation"); ShouldCorrectRotationFunction->IsInBlueprint())
-	{
-		return K2_ShouldCorrectRotation();
-	}
-	
-	return Super::ShouldCorrectRotation();
+	return K2_ShouldCorrectRotation();
+}
+
+bool USMNCharacterMovementComponent::K2_ShouldCatchAir_Implementation(const FFindFloorResult OldFloor, const FFindFloorResult NewFloor)
+{
+	return Super::ShouldCatchAir(OldFloor, NewFloor);
 }
 
 bool USMNCharacterMovementComponent::ShouldCatchAir(const FFindFloorResult& OldFloor, const FFindFloorResult& NewFloor)
 {
-	if (const UFunction* ShouldCatchAirFunction = GetClass()->FindFunctionByName("K2_ShouldCatchAir"); ShouldCatchAirFunction->IsInBlueprint())
-	{
-		return K2_ShouldCatchAir(OldFloor, NewFloor);
-	}
-	
-	return Super::ShouldCatchAir(OldFloor, NewFloor);
+	return K2_ShouldCatchAir(OldFloor, NewFloor);
+}
+
+bool USMNCharacterMovementComponent::K2_CanAttemptJump_Implementation() const
+{
+	return Super::CanAttemptJump();
 }
 
 bool USMNCharacterMovementComponent::CanAttemptJump() const
 {
-	if (const UFunction* CanAttemptJumpFunction = GetClass()->FindFunctionByName("K2_CanAttemptJump"); CanAttemptJumpFunction->IsInBlueprint())
-	{
-		return K2_CanAttemptJump();
-	}
-	
-	return Super::CanAttemptJump();
+	return K2_CanAttemptJump();
+}
+
+void USMNCharacterMovementComponent::K2_StartFalling_Implementation(int32 Iterations, float remainingTime, float timeTick, const FVector Delta, const FVector subLoc)
+{
+	Super::StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
 }
 
 void USMNCharacterMovementComponent::StartFalling(int32 Iterations, float remainingTime, float timeTick, const FVector& Delta, const FVector& subLoc)
 {
-	if (const UFunction* StartFallingFunction = GetClass()->FindFunctionByName("K2_StartFalling"); StartFallingFunction->IsInBlueprint())
-	{
-		K2_StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
-		return;
-	}
-	
-	Super::StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
+	K2_StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
+}
+
+void USMNCharacterMovementComponent::K2_HandleWalkingOffLedge_Implementation(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta)
+{
+	Super::HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
 }
 
 void USMNCharacterMovementComponent::HandleWalkingOffLedge(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta)
 {
-	if (const UFunction* HandleWalkingOffLedgeFunction = GetClass()->FindFunctionByName("K2_HandleWalkingOffLedge"); HandleWalkingOffLedgeFunction->IsInBlueprint())
-	{
-		K2_HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
-		return;
-	}
-	
-	Super::HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
+	K2_HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
+}
+
+void USMNCharacterMovementComponent::K2_PhysWalking_Implementation(float deltaTime, int32 Iterations)
+{
+	Super::PhysWalking(deltaTime, Iterations);
 }
 
 void USMNCharacterMovementComponent::PhysWalking(float deltaTime, int32 Iterations)
 {
-	if (const UFunction* PhysWalkingFunction = GetClass()->FindFunctionByName("K2_PhysWalking"); PhysWalkingFunction->IsInBlueprint())
-	{
-		K2_PhysWalking(deltaTime, Iterations);
-		return;
-	}
-	
-	Super::PhysWalking(deltaTime, Iterations);
+	K2_PhysWalking(deltaTime, Iterations);
+}
+
+void USMNCharacterMovementComponent::K2_PhysFalling_Implementation(float deltaTime, int32 Iterations)
+{
+	Super::PhysFalling(deltaTime, Iterations);
 }
 
 void USMNCharacterMovementComponent::PhysFalling(float deltaTime, int32 Iterations)
 {
-	if (const UFunction* PhysFallingFunction = GetClass()->FindFunctionByName("K2_PhysFalling"); PhysFallingFunction->IsInBlueprint())
-	{
-		K2_PhysFalling(deltaTime, Iterations);
-		return;
-	}
-	
-	Super::PhysFalling(deltaTime, Iterations);
+	K2_PhysFalling(deltaTime, Iterations);
+}
+
+void USMNCharacterMovementComponent::K2_PhysSwimming_Implementation(float deltaTime, int32 Iterations)
+{
+	Super::PhysSwimming(deltaTime, Iterations);
 }
 
 void USMNCharacterMovementComponent::PhysSwimming(float deltaTime, int32 Iterations)
 {
-	if (const UFunction* PhysSwimmingFunction = GetClass()->FindFunctionByName("K2_PhysSwimming"); PhysSwimmingFunction->IsInBlueprint())
-	{
-		K2_PhysSwimming(deltaTime, Iterations);
-		return;
-	}
-	
-	Super::PhysSwimming(deltaTime, Iterations);
+	K2_PhysSwimming(deltaTime, Iterations);
+}
+
+void USMNCharacterMovementComponent::K2_PhysFlying_Implementation(float deltaTime, int32 Iterations)
+{
+	Super::PhysFlying(deltaTime, Iterations);
 }
 
 void USMNCharacterMovementComponent::PhysFlying(float deltaTime, int32 Iterations)
 {
-	if (const UFunction* PhysFlyingFunction = GetClass()->FindFunctionByName("K2_PhysFlying"); PhysFlyingFunction->IsInBlueprint())
-	{
-		K2_PhysFlying(deltaTime, Iterations);
-		return;
-	}
-	
-	Super::PhysFlying(deltaTime, Iterations);
+	K2_PhysFlying(deltaTime, Iterations);
+}
+
+void USMNCharacterMovementComponent::K2_PhysCustom_Implementation(float deltaTime, int32 Iterations)
+{
+	Super::PhysCustom(deltaTime, Iterations);
 }
 
 void USMNCharacterMovementComponent::PhysCustom(float deltaTime, int32 Iterations)
 {
-	if (const UFunction* PhysCustomFunction = GetClass()->FindFunctionByName("K2_PhysCustom"); PhysCustomFunction->IsInBlueprint())
-	{
-		K2_PhysCustom(deltaTime, Iterations);
-		return;
-	}
-	
-	Super::PhysCustom(deltaTime, Iterations);
+	K2_PhysCustom(deltaTime, Iterations);
+}
+
+float USMNCharacterMovementComponent::K2_SlideAlongSurface_Implementation(const FVector& Delta, float Time, const FVector& Normal, FHitResult& Hit, bool bHandleImpact)
+{
+	return Super::SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
 }
 
 float USMNCharacterMovementComponent::SlideAlongSurface(const FVector& Delta, float Time, const FVector& Normal,
                                                         FHitResult& Hit, bool bHandleImpact)
 {
-	if (const UFunction* SlideAlongSurfaceFunction = GetClass()->FindFunctionByName("K2_SlideAlongSurface"); SlideAlongSurfaceFunction->IsInBlueprint())
-	{
-		return K2_SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
-	}
-	
-	return Super::SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
+	return K2_SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
+}
+
+void USMNCharacterMovementComponent::K2_TwoWallAdjust_Implementation(FVector& Delta, const FHitResult Hit, const FVector OldHitNormal) const
+{
+	Super::TwoWallAdjust(Delta, Hit, OldHitNormal);
 }
 
 void USMNCharacterMovementComponent::TwoWallAdjust(FVector& Delta, const FHitResult& Hit,
 	const FVector& OldHitNormal) const
 {
-	if (const UFunction* TwoWallAdjustFunction = GetClass()->FindFunctionByName("K2_TwoWallAdjust"); TwoWallAdjustFunction->IsInBlueprint())
-	{
-		K2_TwoWallAdjust(Delta, Hit, OldHitNormal);
-		return;
-	}
-	Super::TwoWallAdjust(Delta, Hit, OldHitNormal);
+	K2_TwoWallAdjust(Delta, Hit, OldHitNormal);
+}
+
+void USMNCharacterMovementComponent::K2_AdjustFloorHeight_Implementation()
+{
+	Super::AdjustFloorHeight();
 }
 
 void USMNCharacterMovementComponent::AdjustFloorHeight()
 {
-	Super::AdjustFloorHeight();
-
 	K2_AdjustFloorHeight();
+}
+
+void USMNCharacterMovementComponent::K2_CalcVelocity_Implementation(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration)
+{
+	Super::CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
 }
 
 void USMNCharacterMovementComponent::CalcVelocity(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration)
 {
-	if (const UFunction* CalcVelocityFunction = GetClass()->FindFunctionByName("K2_CalcVelocity"); CalcVelocityFunction->IsInBlueprint())
-	{
-		K2_CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
-		return;
-	}
-	
-	Super::CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
+	K2_CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
+}
+
+void USMNCharacterMovementComponent::K2_PerformMovement_Implementation(float deltaTime)
+{
+	Super::PerformMovement(deltaTime);
 }
 
 void USMNCharacterMovementComponent::PerformMovement(float deltaTime)
 {
-	Super::PerformMovement(deltaTime);
-
 	K2_PerformMovement(deltaTime);
+}
+
+void USMNCharacterMovementComponent::K2_SimulateMovement_Implementation(float deltaTime)
+{
+	Super::SimulateMovement(deltaTime);
 }
 
 void USMNCharacterMovementComponent::SimulateMovement(float deltaTime)
 {
-	Super::SimulateMovement(deltaTime);
-
 	K2_SimulateMovement(deltaTime);
 }
 
