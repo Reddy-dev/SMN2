@@ -5,3 +5,5 @@ TODO:
 
 Improve Max Speed Functions
 Expose more functions
+
+Join our Discord: https://discord.gg/PwGBQBR7MM
