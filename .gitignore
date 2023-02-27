@@ -78,3 +78,6 @@ DerivedDataCache/*
 
 # Packaged releases
 Releases/*
+
+*/Binaries/*
+*/Intermediate/*
