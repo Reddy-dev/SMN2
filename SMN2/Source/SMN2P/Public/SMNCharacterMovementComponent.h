@@ -12,11 +12,17 @@ struct TSMN_PredictedProperty
 {
 	FName PropertyName;
 	T Value; 
-	T DefaultValue;
 
 	bool operator ==(const TSMN_PredictedProperty& Other) const
 	{
-		return PropertyName == Other.PropertyName && DefaultValue == Other.DefaultValue;
+		return PropertyName == Other.PropertyName;
+	}
+
+	friend FArchive& operator<<(FArchive& Ar, TSMN_PredictedProperty& A)
+	{
+		Ar << A.PropertyName;
+		Ar << A.Value;
+		return Ar;
 	}
 };
 
@@ -40,7 +46,6 @@ public:
 	TArray<TSMN_PredictedProperty<FRotator>> MoveData_PredictedProperties_Rotator;
 	TArray<TSMN_PredictedProperty<uint8>> MoveData_PredictedProperties_Byte;
 	TArray<TSMN_PredictedProperty<FGameplayTag>> MoveData_PredictedProperties_GameplayTag;
-	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> MoveData_PredictedProperties_GameplayTagContainer;
 };
 
 class FSMN_CharacterNetworkMoveDataContainer : public FCharacterNetworkMoveDataContainer
@@ -74,7 +79,6 @@ public:
 	TArray<TSMN_PredictedProperty<FRotator>> SavedPredictedProperties_Rotator;
 	TArray<TSMN_PredictedProperty<uint8>> SavedPredictedProperties_Byte;
 	TArray<TSMN_PredictedProperty<FGameplayTag>> SavedPredictedProperties_GameplayTag;
-	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> SavedPredictedProperties_GameplayTagContainer;
 };
 
 class FSMN_NetworkPredictionData_Client : public FNetworkPredictionData_Client_Character
@@ -90,13 +94,13 @@ public:
 /**
  * 
  */
-UCLASS(Abstract, Blueprintable, BlueprintType)
-class SMN2P_API USMNCharacterMovementComponent : public UCharacterMovementComponent
+UCLASS(Blueprintable, BlueprintType)
+class SMN2P_API USMN_CharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
 	
 public:
-	USMNCharacterMovementComponent();
+	USMN_CharacterMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
 	virtual FNetworkPredictionData_Client* GetPredictionData_Client() const override;
 	virtual void MoveAutonomous(float ClientTimeStamp, float DeltaTime, uint8 CompressedFlags, const FVector& NewAccel) override;
@@ -104,40 +108,37 @@ public:
 	FSMN_CharacterNetworkMoveDataContainer SMN_MoveDataContainer; 
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Bool(FName PropertyName, bool DefaultValue);
+	void AddPredictedProperty_Bool(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Int32(FName PropertyName, int32 DefaultValue);
+	void AddPredictedProperty_Int32(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Float(FName PropertyName,	float DefaultValue);
+	void AddPredictedProperty_Float(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Double(FName PropertyName, double DefaultValue);
+	void AddPredictedProperty_Double(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Vector(FName PropertyName, FVector DefaultValue);
+	void AddPredictedProperty_Vector(FName PropertyName);
 	
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Vector2D(FName PropertyName, FVector2D DefaultValue);
+	void AddPredictedProperty_Vector2D(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Vector4(FName PropertyName, FVector4 DefaultValue);
+	void AddPredictedProperty_Vector4(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Quat(FName PropertyName, FQuat DefaultValue);
+	void AddPredictedProperty_Quat(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Byte(FName PropertyName, uint8 DefaultValue);
+	void AddPredictedProperty_Byte(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_GameplayTag(FName PropertyName, FGameplayTag DefaultValue);
+	void AddPredictedProperty_GameplayTag(FName PropertyName);
 
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_GameplayTagContainer(FName PropertyName, FGameplayTagContainer DefaultValue);
-
-	UFUNCTION(BlueprintCallable, Category = "SMN2")
-	void AddPredictedProperty_Rotator(FName PropertyName, FRotator DefaultValue);
+	void AddPredictedProperty_Rotator(FName PropertyName);
 
 	TArray<TSMN_PredictedProperty<bool>> PredictedProperties_Bool;
 	TArray<TSMN_PredictedProperty<int32>> PredictedProperties_Int32;
@@ -150,14 +151,6 @@ public:
 	TArray<TSMN_PredictedProperty<FRotator>> PredictedProperties_Rotator;
 	TArray<TSMN_PredictedProperty<uint8>> PredictedProperties_Byte;
 	TArray<TSMN_PredictedProperty<FGameplayTag>> PredictedProperties_GameplayTag;
-	TArray<TSMN_PredictedProperty<FGameplayTagContainer>> PredictedProperties_GameplayTagContainer;
-	
-
-	// Implementable Events
-
-	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "Construction"))
-	void K2_Construction();
-	virtual void PostInitProperties() override;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "OnMovementUpdated"))
 	void K2_OnMovementUpdated(float DeltaTime, const FVector OldLocation, const FVector OldVelocity);
