@@ -1,10 +1,10 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "2.1",
-	"FriendlyName": "SMN2P",
+	"VersionName": "2.2",
+	"FriendlyName": "SMN2",
 	"Description": "",
-	"Category": "Other",
+	"Category": "Movement",
 	"CreatedBy": "Reddy",
 	"CreatedByURL": "",
 	"DocsURL": "",
@@ -12,13 +12,12 @@
 	"SupportURL": "",
 	"CanContainContent": true,
 	"IsBetaVersion": true,
-	"IsExperimentalVersion": false,
-	"Installed": false,
+	"IsExperimentalVersion": true,
 	"Modules": [
 		{
 			"Name": "SMN2P",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PreDefault"
 		}
 	]
 }
