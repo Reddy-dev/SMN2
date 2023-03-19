@@ -245,7 +245,6 @@ public:
 	virtual void SimulateMovement(float deltaTime) override;
 	
 	// Callables
-
 	UFUNCTION(BlueprintCallable, Category = "SMN2", meta = (DisplayName = "IsMovementInProgress"))
 	FORCEINLINE bool K2_IsMovementInProgress() const { return IsMovementInProgress(); }
 
