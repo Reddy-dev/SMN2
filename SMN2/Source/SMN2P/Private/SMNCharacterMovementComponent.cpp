@@ -359,7 +359,7 @@ FSavedMovePtr FSMN_NetworkPredictionData_Client::AllocateNewMove()
 
 USMN_CharacterMovementComponent::USMN_CharacterMovementComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	SetIsReplicated(true);
+	SetIsReplicatedByDefault(true);
 	SetNetworkMoveDataContainer(SMN_MoveDataContainer); 
 }
 
