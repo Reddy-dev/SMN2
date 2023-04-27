@@ -1,8 +1,8 @@
 # Smooth-Networked-Movement-Plugin
-Public Repository so anyone can push updates to the plugin. 
+Character Movement Network Prediction easily accessible in UE5 Blueprints! 
 
 TODO:
-
+Bug Fixes
 Documentation
 
 Join our Discord: https://discord.gg/PwGBQBR7MM
