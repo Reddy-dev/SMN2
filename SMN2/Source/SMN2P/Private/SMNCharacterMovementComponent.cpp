@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SMNCharacterMovementComponent.h"
+#include "SMN2Macros.h"
 #include "GameFramework/Character.h"
-#include "UObject/PropertyAccessUtil.h"
 
 void FSMN_NetworkMoveData::ClientFillNetworkMoveData(const FSavedMove_Character& ClientMove, ENetworkMoveType MoveType)
 {
@@ -134,7 +134,7 @@ void FSMN_SavedMove::SetMoveFor(ACharacter* Character, float InDeltaTime, FVecto
 	Super::SetMoveFor(Character, InDeltaTime, NewAccel, ClientData);
 
 	USMN_CharacterMovementComponent* SMNCharacterMovement = Character->GetCharacterMovement<USMN_CharacterMovementComponent>();
-	if (LIKELY(SMNCharacterMovement))
+	if (SMNCharacterMovement)
 	{
 		for (TSMN_PredictedProperty<bool>& BoolProperty : SMNCharacterMovement->PredictedProperties_Bool)
 		{
@@ -252,7 +252,7 @@ void FSMN_SavedMove::PrepMoveFor(ACharacter* Character)
 	Super::PrepMoveFor(Character);
 
 	USMN_CharacterMovementComponent* SMNCharacterMovement = Character->GetCharacterMovement<USMN_CharacterMovementComponent>();
-	if (LIKELY(Character))
+	if likely(Character)
 	{
 		for (TSMN_PredictedProperty<bool>& BoolProperty : SavedPredictedProperties_Bool)
 		{
@@ -571,11 +571,6 @@ void USMN_CharacterMovementComponent::K2_OnMovementUpdated_Implementation(float 
 	Super::OnMovementUpdated(DeltaTime, OldLocation, OldVelocity);
 }
 
-void USMN_CharacterMovementComponent::OnMovementUpdated(float DeltaSeconds, const FVector& OldLocation, const FVector& OldVelocity)
-{
-	K2_OnMovementUpdated(DeltaSeconds, OldLocation, OldVelocity);
-}
-
 void USMN_CharacterMovementComponent::K2_OnMovementModeChanged_Implementation(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	
@@ -593,19 +588,9 @@ float USMN_CharacterMovementComponent::K2_GetMaxSpeed_Implementation() const
 	return Super::GetMaxSpeed();
 }
 
-float USMN_CharacterMovementComponent::GetMaxSpeed() const
-{
-	return K2_GetMaxSpeed();
-}
-
 float USMN_CharacterMovementComponent::K2_GetMaxAcceleration_Implementation() const
 {
 	return Super::GetMaxAcceleration();
-}
-
-float USMN_CharacterMovementComponent::GetMaxAcceleration() const
-{
-	return K2_GetMaxAcceleration();
 }
 
 float USMN_CharacterMovementComponent::K2_GetMaxBrakingDeceleration_Implementation() const
@@ -613,19 +598,9 @@ float USMN_CharacterMovementComponent::K2_GetMaxBrakingDeceleration_Implementati
 	return Super::GetMaxBrakingDeceleration();
 }
 
-float USMN_CharacterMovementComponent::GetMaxBrakingDeceleration() const
-{
-	return K2_GetMaxBrakingDeceleration();
-}
-
 float USMN_CharacterMovementComponent::K2_GetGravityZ_Implementation() const
 {
 	return Super::GetGravityZ();
-}
-
-float USMN_CharacterMovementComponent::GetGravityZ() const
-{
-	return K2_GetGravityZ();
 }
 
 float USMN_CharacterMovementComponent::K2_GetMaxJumpHeight_Implementation() const
@@ -633,19 +608,9 @@ float USMN_CharacterMovementComponent::K2_GetMaxJumpHeight_Implementation() cons
 	return Super::GetMaxJumpHeight();
 }
 
-float USMN_CharacterMovementComponent::GetMaxJumpHeight() const
-{
-	return K2_GetMaxJumpHeight();
-}
-
 bool USMN_CharacterMovementComponent::K2_ShouldCorrectRotation_Implementation() const
 {
 	return Super::ShouldCorrectRotation();
-}
-
-bool USMN_CharacterMovementComponent::ShouldCorrectRotation() const
-{
-	return K2_ShouldCorrectRotation();
 }
 
 bool USMN_CharacterMovementComponent::K2_ShouldCatchAir_Implementation(const FFindFloorResult OldFloor, const FFindFloorResult NewFloor)
@@ -653,19 +618,9 @@ bool USMN_CharacterMovementComponent::K2_ShouldCatchAir_Implementation(const FFi
 	return Super::ShouldCatchAir(OldFloor, NewFloor);
 }
 
-bool USMN_CharacterMovementComponent::ShouldCatchAir(const FFindFloorResult& OldFloor, const FFindFloorResult& NewFloor)
-{
-	return K2_ShouldCatchAir(OldFloor, NewFloor);
-}
-
 bool USMN_CharacterMovementComponent::K2_CanAttemptJump_Implementation() const
 {
 	return Super::CanAttemptJump();
-}
-
-bool USMN_CharacterMovementComponent::CanAttemptJump() const
-{
-	return K2_CanAttemptJump();
 }
 
 void USMN_CharacterMovementComponent::K2_StartFalling_Implementation(int32 Iterations, float remainingTime, float timeTick, const FVector Delta, const FVector subLoc)
@@ -673,19 +628,9 @@ void USMN_CharacterMovementComponent::K2_StartFalling_Implementation(int32 Itera
 	Super::StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
 }
 
-void USMN_CharacterMovementComponent::StartFalling(int32 Iterations, float remainingTime, float timeTick, const FVector& Delta, const FVector& subLoc)
-{
-	K2_StartFalling(Iterations, remainingTime, timeTick, Delta, subLoc);
-}
-
 void USMN_CharacterMovementComponent::K2_HandleWalkingOffLedge_Implementation(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta)
 {
 	Super::HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
-}
-
-void USMN_CharacterMovementComponent::HandleWalkingOffLedge(const FVector& PreviousFloorImpactNormal, const FVector& PreviousFloorContactNormal, const FVector& PreviousLocation, float TimeDelta)
-{
-	K2_HandleWalkingOffLedge(PreviousFloorImpactNormal, PreviousFloorContactNormal, PreviousLocation, TimeDelta);
 }
 
 void USMN_CharacterMovementComponent::K2_PhysWalking_Implementation(float deltaTime, int32 Iterations)
@@ -693,19 +638,9 @@ void USMN_CharacterMovementComponent::K2_PhysWalking_Implementation(float deltaT
 	Super::PhysWalking(deltaTime, Iterations);
 }
 
-void USMN_CharacterMovementComponent::PhysWalking(float deltaTime, int32 Iterations)
-{
-	K2_PhysWalking(deltaTime, Iterations);
-}
-
 void USMN_CharacterMovementComponent::K2_PhysFalling_Implementation(float deltaTime, int32 Iterations)
 {
 	Super::PhysFalling(deltaTime, Iterations);
-}
-
-void USMN_CharacterMovementComponent::PhysFalling(float deltaTime, int32 Iterations)
-{
-	K2_PhysFalling(deltaTime, Iterations);
 }
 
 void USMN_CharacterMovementComponent::K2_PhysSwimming_Implementation(float deltaTime, int32 Iterations)
@@ -713,19 +648,9 @@ void USMN_CharacterMovementComponent::K2_PhysSwimming_Implementation(float delta
 	Super::PhysSwimming(deltaTime, Iterations);
 }
 
-void USMN_CharacterMovementComponent::PhysSwimming(float deltaTime, int32 Iterations)
-{
-	K2_PhysSwimming(deltaTime, Iterations);
-}
-
 void USMN_CharacterMovementComponent::K2_PhysFlying_Implementation(float deltaTime, int32 Iterations)
 {
 	Super::PhysFlying(deltaTime, Iterations);
-}
-
-void USMN_CharacterMovementComponent::PhysFlying(float deltaTime, int32 Iterations)
-{
-	K2_PhysFlying(deltaTime, Iterations);
 }
 
 void USMN_CharacterMovementComponent::K2_PhysCustom_Implementation(float deltaTime, int32 Iterations)
@@ -733,20 +658,9 @@ void USMN_CharacterMovementComponent::K2_PhysCustom_Implementation(float deltaTi
 	Super::PhysCustom(deltaTime, Iterations);
 }
 
-void USMN_CharacterMovementComponent::PhysCustom(float deltaTime, int32 Iterations)
-{
-	K2_PhysCustom(deltaTime, Iterations);
-}
-
 float USMN_CharacterMovementComponent::K2_SlideAlongSurface_Implementation(const FVector& Delta, float Time, const FVector& Normal, FHitResult& Hit, bool bHandleImpact)
 {
 	return Super::SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
-}
-
-float USMN_CharacterMovementComponent::SlideAlongSurface(const FVector& Delta, float Time, const FVector& Normal,
-                                                        FHitResult& Hit, bool bHandleImpact)
-{
-	return K2_SlideAlongSurface(Delta, Time, Normal, Hit, bHandleImpact);
 }
 
 void USMN_CharacterMovementComponent::K2_TwoWallAdjust_Implementation(FVector& Delta, const FHitResult Hit, const FVector OldHitNormal) const
@@ -754,20 +668,9 @@ void USMN_CharacterMovementComponent::K2_TwoWallAdjust_Implementation(FVector& D
 	Super::TwoWallAdjust(Delta, Hit, OldHitNormal);
 }
 
-void USMN_CharacterMovementComponent::TwoWallAdjust(FVector& Delta, const FHitResult& Hit,
-	const FVector& OldHitNormal) const
-{
-	K2_TwoWallAdjust(Delta, Hit, OldHitNormal);
-}
-
 void USMN_CharacterMovementComponent::K2_AdjustFloorHeight_Implementation()
 {
 	Super::AdjustFloorHeight();
-}
-
-void USMN_CharacterMovementComponent::AdjustFloorHeight()
-{
-	K2_AdjustFloorHeight();
 }
 
 void USMN_CharacterMovementComponent::K2_CalcVelocity_Implementation(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration)
@@ -775,19 +678,9 @@ void USMN_CharacterMovementComponent::K2_CalcVelocity_Implementation(float delta
 	Super::CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
 }
 
-void USMN_CharacterMovementComponent::CalcVelocity(float deltaTime, float Friction, bool bFluid, float BrakingDeceleration)
-{
-	K2_CalcVelocity(deltaTime, Friction, bFluid, BrakingDeceleration);
-}
-
 void USMN_CharacterMovementComponent::K2_PerformMovement_Implementation(float deltaTime)
 {
 	Super::PerformMovement(deltaTime);
-}
-
-void USMN_CharacterMovementComponent::PerformMovement(float deltaTime)
-{
-	K2_PerformMovement(deltaTime);
 }
 
 void USMN_CharacterMovementComponent::K2_SimulateMovement_Implementation(float deltaTime)
@@ -795,8 +688,23 @@ void USMN_CharacterMovementComponent::K2_SimulateMovement_Implementation(float d
 	Super::SimulateMovement(deltaTime);
 }
 
-void USMN_CharacterMovementComponent::SimulateMovement(float deltaTime)
+FVector USMN_CharacterMovementComponent::K2_GetImpartedMovementBaseVelocity_Implementation() const
 {
-	K2_SimulateMovement(deltaTime);
+	return Super::GetImpartedMovementBaseVelocity();
+}
+
+bool USMN_CharacterMovementComponent::K2_ApplyRequestedMove_Implementation(float DeltaTime, float MaxAccel, float MaxSpeed, float Friction, float BrakingDeceleration, FVector& OutAcceleration, float& OutRequestedSpeed)
+{
+	return Super::ApplyRequestedMove(DeltaTime, MaxAccel, MaxSpeed, Friction, BrakingDeceleration, OutAcceleration, OutRequestedSpeed);
+}
+
+void USMN_CharacterMovementComponent::K2_ControlledCharacterMove_Implementation(const FVector& InputVector, float DeltaSeconds)
+{
+	Super::ControlledCharacterMove(InputVector, DeltaSeconds);
+}
+
+void USMN_CharacterMovementComponent::K2_SmoothClientPosition_Implementation(float DeltaSeconds)
+{
+	Super::SmoothClientPosition(DeltaSeconds);
 }
 
