@@ -17,7 +17,7 @@
 		{
 			"Name": "SMN2P",
 			"Type": "Runtime",
-			"LoadingPhase": "PreDefault"
+			"LoadingPhase": "EarliestPossible"
 		}
 	]
 }

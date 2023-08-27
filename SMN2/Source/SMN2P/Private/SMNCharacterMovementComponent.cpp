@@ -488,6 +488,65 @@ void USMN_CharacterMovementComponent::MoveAutonomous(float ClientTimeStamp, floa
 	Super::MoveAutonomous(ClientTimeStamp, DeltaTime, CompressedFlags, NewAccel);
 }
 
+void USMN_CharacterMovementComponent::AddPredictedProperty(FName PropertyName)
+{
+	if likely(FProperty* Property = GetClass()->FindPropertyByName(PropertyName))
+	{
+		if (const FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
+		{
+			AddPredictedProperty_Bool(PropertyName);
+		}
+		else if (const FIntProperty* Int32Property = CastField<FIntProperty>(Property))
+		{
+			AddPredictedProperty_Int32(PropertyName);
+		}
+		else if (const FFloatProperty* FloatProperty = CastField<FFloatProperty>(Property))
+		{
+			AddPredictedProperty_Float(PropertyName);
+		}
+		else if (const FDoubleProperty* DoubleProperty = CastField<FDoubleProperty>(Property))
+		{
+			AddPredictedProperty_Double(PropertyName);
+		}
+		else if (const FStructProperty* StructProperty = CastField<FStructProperty>(Property))
+		{
+			if (StructProperty->Struct == TBaseStructure<FVector>::Get())
+			{
+				AddPredictedProperty_Vector(PropertyName);
+			}
+			else if (StructProperty->Struct == TBaseStructure<FVector2D>::Get())
+			{
+				AddPredictedProperty_Vector2D(PropertyName);
+			}
+			else if (StructProperty->Struct == TBaseStructure<FVector4>::Get())
+			{
+				AddPredictedProperty_Vector4(PropertyName);
+			}
+			else if (StructProperty->Struct == TBaseStructure<FQuat>::Get())
+			{
+				AddPredictedProperty_Quat(PropertyName);
+			}
+			else if (StructProperty->Struct == TBaseStructure<FRotator>::Get())
+			{
+				AddPredictedProperty_Rotator(PropertyName);
+			}
+			else if (StructProperty->Struct == TBaseStructure<FGameplayTag>::Get())
+			{
+				AddPredictedProperty_GameplayTag(PropertyName);
+			}
+		}
+		else if (const FByteProperty* ByteProperty = CastField<FByteProperty>(Property))
+		{
+			AddPredictedProperty_Byte(PropertyName);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("USMN_CharacterMovementComponent::AddPredictedProperty: Property %s not found!"),
+			*PropertyName.ToString());
+	}
+}
+
 void USMN_CharacterMovementComponent::AddPredictedProperty_Bool(FName PropertyName)
 {
 	TSMN_PredictedProperty<bool> NewProperty;

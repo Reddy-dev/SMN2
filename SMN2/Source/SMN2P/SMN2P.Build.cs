@@ -11,7 +11,7 @@ public class SMN2P : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				
+				ModuleDirectory
 			}
 			);
 				

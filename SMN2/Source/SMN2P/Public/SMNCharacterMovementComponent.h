@@ -152,6 +152,107 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SMN2")
 	void AddPredictedProperty_Rotator(FName PropertyName);
 
+	template <typename T>
+	FORCEINLINE void AddPredictedProperty(FProperty* Property)
+	{
+		if constexpr (TIsSame<T, bool>::Value)
+		{
+			AddPredictedProperty_Bool(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, int32>::Value)
+		{
+			AddPredictedProperty_Int32(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, float>::Value)
+		{
+			AddPredictedProperty_Float(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, double>::Value)
+		{
+			AddPredictedProperty_Double(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FVector>::Value)
+		{
+			AddPredictedProperty_Vector(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FVector2D>::Value)
+		{
+			AddPredictedProperty_Vector2D(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FVector4>::Value)
+		{
+			AddPredictedProperty_Vector4(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FQuat>::Value)
+		{
+			AddPredictedProperty_Quat(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FRotator>::Value)
+		{
+			AddPredictedProperty_Rotator(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, uint8>::Value)
+		{
+			AddPredictedProperty_Byte(Property->GetFName());
+		}
+		else if constexpr (TIsSame<T, FGameplayTag>::Value)
+		{
+			AddPredictedProperty_GameplayTag(Property->GetFName());
+		}
+	}
+
+	template <typename T>
+	FORCEINLINE void AddPredictedProperty(FName PropertyName)
+	{
+		if constexpr (TIsSame<T, bool>::Value)
+		{
+			AddPredictedProperty_Bool(PropertyName);
+		}
+		else if constexpr (TIsSame<T, int32>::Value)
+		{
+			AddPredictedProperty_Int32(PropertyName);
+		}
+		else if constexpr (TIsSame<T, float>::Value)
+		{
+			AddPredictedProperty_Float(PropertyName);
+		}
+		else if constexpr (TIsSame<T, double>::Value)
+		{
+			AddPredictedProperty_Double(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FVector>::Value)
+		{
+			AddPredictedProperty_Vector(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FVector2D>::Value)
+		{
+			AddPredictedProperty_Vector2D(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FVector4>::Value)
+		{
+			AddPredictedProperty_Vector4(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FQuat>::Value)
+		{
+			AddPredictedProperty_Quat(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FRotator>::Value)
+		{
+			AddPredictedProperty_Rotator(PropertyName);
+		}
+		else if constexpr (TIsSame<T, uint8>::Value)
+		{
+			AddPredictedProperty_Byte(PropertyName);
+		}
+		else if constexpr (TIsSame<T, FGameplayTag>::Value)
+		{
+			AddPredictedProperty_GameplayTag(PropertyName);
+		}
+	}
+
+	UFUNCTION(BlueprintCallable, Category = "SMN2")
+	void AddPredictedProperty(FName PropertyName);
+	
 	UFUNCTION(BlueprintNativeEvent, Category = "SMN2", meta = (DisplayName = "OnMovementUpdated"))
 	void K2_OnMovementUpdated(float DeltaTime, const FVector OldLocation, const FVector OldVelocity);
 	FORCEINLINE virtual void OnMovementUpdated(float DeltaSeconds, const FVector& OldLocation, const FVector& OldVelocity) override { K2_OnMovementUpdated(DeltaSeconds, OldLocation, OldVelocity); }
