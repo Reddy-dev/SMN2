@@ -1,7 +1,7 @@
 # Smooth-Networked-Movement-Plugin
 Character Movement Network Prediction, easily accessible in UE5 Blueprints! 
 
-Credit to Reid/Blindopoly
+Credit to Reid/Blindopoly @ReidTreharne
 
 Works for 5.3 and 5.4
 
